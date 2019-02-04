@@ -8,25 +8,39 @@ type Sphere struct {
 	Radius float64
 }
 
-// RayIntersect checks if ray intersects with sphere
-func (s *Sphere) RayIntersect(ray Ray) bool {
-	var oc = ray.Origin.Sub(s.Center)
-	var a = Dot(ray.Direction, ray.Direction)
-	var b = float64(2) * Dot(oc, ray.Direction)
-	var c = Dot(oc, oc) - s.Radius*s.Radius
-	var d = b*b - float64(4)*a*c
-	return d > 0
-}
+// check if sphere is hittable
+var _ Hitable = &Sphere{}
 
-// RayHit checks if ray intersects with sphere and returns normal length
-func (s *Sphere) RayHit(ray Ray) float64 {
+// Hit returns closest hit
+func (s Sphere) Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool) {
 	var oc = ray.Origin.Sub(s.Center)
 	var a = Dot(ray.Direction, ray.Direction)
-	var b = float64(2) * Dot(oc, ray.Direction)
+	var b = Dot(oc, ray.Direction)
 	var c = Dot(oc, oc) - s.Radius*s.Radius
-	var d = b*b - float64(4)*a*c
-	if d < 0 {
-		return -1
+	var d = b*b - a*c
+	if d <= 0 {
+		return nil, false
 	}
-	return (-b - math.Sqrt(d)) / (2 * a)
+
+	var t = (-b - math.Sqrt(d)) / a
+	if t > tMin && t < tMax {
+		var p = ray.PointAt(t)
+		return &Hit{
+			T: t,
+			P: p,
+			N: p.Sub(s.Center).DivF(s.Radius),
+		}, true
+	}
+
+	t = (-b + math.Sqrt(d)) / a
+	if t > tMin && t < tMax {
+		var p = ray.PointAt(t)
+		return &Hit{
+			T: t,
+			P: p,
+			N: p.Sub(s.Center).DivF(s.Radius),
+		}, true
+	}
+
+	return nil, false
 }

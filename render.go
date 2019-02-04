@@ -2,6 +2,7 @@ package main
 
 import (
 	"image/color"
+	"math"
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
@@ -21,7 +22,7 @@ type render struct {
 	origin     engine.Vec3
 
 	// objects
-	sphere engine.Sphere
+	scene engine.Scene
 }
 
 func (r *render) Layout(objects []fyne.CanvasObject, size fyne.Size) {
@@ -49,23 +50,21 @@ func (r *render) draw(px, py, w, h int) color.Color {
 		Direction: r.bottomLeft.Add(r.horisontal.MulF(u)).Add(r.vertical.MulF(v)),
 	}
 
-	var t = r.sphere.RayHit(ray)
-	if t > 0 {
-		var n = ray.PointAt(t).Sub(engine.Vec3{0, 0, -1}).UnitV()
-		var c = n.Add(engine.Vec3{1, 1, 1}).MulF(0.5)
+	return r.color(&ray).RGBA(1)
+}
 
-		return engine.Color{c.X(), c.Y(), c.Z()}.RGBA(1)
-	}
-
-	if r.sphere.RayIntersect(ray) {
-		return engine.Color{1, 0, 0}.RGBA(1)
+func (r *render) color(ray *engine.Ray) engine.Color {
+	hit, ok := r.scene.Hit(ray, 0, math.MaxFloat64)
+	if ok {
+		var c = hit.N.Add(engine.Vec3{1, 1, 1}).MulF(0.5)
+		return engine.Color{c.X(), c.Y(), c.Z()}
 	}
 
 	var dir = ray.Direction.UnitV()
 	var tt = 0.5 * (dir.Y() + 1.0)
 	var c = engine.Vec3{1, 1, 1}.MulF(1 - tt).Add(engine.Vec3{0.5, 0.7, 1.0}.MulF(tt))
 
-	return engine.Color{c.X(), c.Y(), c.Z()}.RGBA(1)
+	return engine.Color{c.X(), c.Y(), c.Z()}
 }
 
 func (r *render) onKeyDown(ev *fyne.KeyEvent) {
@@ -87,7 +86,10 @@ func Render(app fyne.App) {
 		horisontal: engine.Vec3{4, 0, 0},
 		vertical:   engine.Vec3{0, 3, 0},
 		origin:     engine.Vec3{0, 0, 0},
-		sphere:     engine.Sphere{Center: engine.Vec3{0, 0, -1}, Radius: 0.5},
+		scene: engine.Scene{
+			engine.Sphere{Center: engine.Vec3{0, 0, -1}, Radius: 0.5},
+			engine.Sphere{Center: engine.Vec3{0, -100.5, -1}, Radius: 100},
+		},
 	}
 	render.canvas = canvas.NewRaster(render.draw)
 
