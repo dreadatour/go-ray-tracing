@@ -49,13 +49,21 @@ func (r *render) draw(px, py, w, h int) color.Color {
 		Direction: r.bottomLeft.Add(r.horisontal.MulF(u)).Add(r.vertical.MulF(v)),
 	}
 
+	var t = r.sphere.RayHit(ray)
+	if t > 0 {
+		var n = ray.PointAt(t).Sub(engine.Vec3{0, 0, -1}).UnitV()
+		var c = n.Add(engine.Vec3{1, 1, 1}).MulF(0.5)
+
+		return engine.Color{c.X(), c.Y(), c.Z()}.RGBA(1)
+	}
+
 	if r.sphere.RayIntersect(ray) {
 		return engine.Color{1, 0, 0}.RGBA(1)
 	}
 
 	var dir = ray.Direction.UnitV()
-	var t = 0.5 * (dir.Y() + 1.0)
-	var c = engine.Vec3{1, 1, 1}.MulF(1 - t).Add(engine.Vec3{0.5, 0.7, 1.0}.MulF(t))
+	var tt = 0.5 * (dir.Y() + 1.0)
+	var c = engine.Vec3{1, 1, 1}.MulF(1 - tt).Add(engine.Vec3{0.5, 0.7, 1.0}.MulF(tt))
 
 	return engine.Color{c.X(), c.Y(), c.Z()}.RGBA(1)
 }
