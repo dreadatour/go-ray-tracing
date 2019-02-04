@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fyne.io/fyne/app"
-)
+import "fyne.io/fyne/app"
 
 func main() {
 	app := app.New()
