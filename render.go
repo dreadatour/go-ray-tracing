@@ -29,27 +29,28 @@ func (r *render) MinSize(objects []fyne.CanvasObject) fyne.Size {
 }
 
 func (r *render) refresh() {
-	r.window.Canvas().Refresh(r.canvas)
+	// r.window.Canvas().Refresh(r.canvas)
 }
 
 func (r *render) draw(px, py, w, h int) color.Color {
 	var color = engine.Color{}
-
 	for i := 0; i < ns; i++ {
 		u := (float64(px) + rand.Float64() - .5) / float64(w)
 		v := (float64(h-py) + rand.Float64() - .5) / float64(h)
 		ray := r.camera.Ray(u, v)
 		color = color.Add(r.color(ray))
 	}
+	color = color.DivF(float64(ns))
 
-	return color.DivF(float64(ns)).RGBA(1)
+	return engine.Color{math.Sqrt(color.R()), math.Sqrt(color.G()), math.Sqrt(color.B())}.RGBA(1)
 }
 
 func (r *render) color(ray *engine.Ray) engine.Color {
 	hit, ok := r.scene.Hit(ray, 0, math.MaxFloat64)
 	if ok {
-		var c = hit.N.Add(engine.Vec3{1, 1, 1}).MulF(0.5)
-		return engine.Color{c.X(), c.Y(), c.Z()}
+		var target = hit.P.Add(hit.N).Add(engine.RandomInUnitSphere())
+		var c = r.color(&engine.Ray{Origin: hit.P, Direction: target.Sub(hit.P)})
+		return c.MulF(0.5)
 	}
 
 	var dir = ray.Direction.UnitV()
@@ -64,7 +65,7 @@ func (r *render) onKeyDown(ev *fyne.KeyEvent) {
 	case fyne.KeyEscape:
 		r.window.Close()
 	}
-	r.refresh()
+	// r.refresh()
 }
 
 // Render 3D scene

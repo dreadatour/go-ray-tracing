@@ -1,6 +1,9 @@
 package engine
 
-import "math"
+import (
+	"math"
+	"math/rand"
+)
 
 // Vec3 is 3D vector
 type Vec3 [3]float64
@@ -76,5 +79,16 @@ func Cross(v1, v2 Vec3) Vec3 {
 		v1[1]*v2[2] - v1[2]*v2[1],
 		v1[2]*v2[0] - v1[0]*v2[2],
 		v1[0]*v2[1] - v1[1]*v2[0],
+	}
+}
+
+// RandomInUnitSphere returns random point in unit radius sphere centered at origin
+func RandomInUnitSphere() Vec3 {
+	var p Vec3
+	for {
+		p = Vec3{rand.Float64()*2 - 1, rand.Float64()*2 - 1, rand.Float64()*2 - 1}
+		if p.SqLen() < 1 {
+			return p
+		}
 	}
 }

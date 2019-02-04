@@ -25,6 +25,11 @@ func (c Color) Add(c2 Color) Color {
 	return Color{c[0] + c2[0], c[1] + c2[1], c[2] + c2[2]}
 }
 
+// MulF is result of color c and const f multiplication (c * f)
+func (c Color) MulF(f float64) Color {
+	return Color{c[0] * f, c[1] * f, c[2] * f}
+}
+
 // DivF is result of color c and const f division (c / f)
 func (c Color) DivF(f float64) Color {
 	return Color{c[0] / f, c[1] / f, c[2] / f}
