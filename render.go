@@ -3,12 +3,15 @@ package main
 import (
 	"image/color"
 	"math"
+	"math/rand"
 
 	"fyne.io/fyne"
 	"fyne.io/fyne/canvas"
 
 	"github.com/dreadatour/go-ray-tracing/engine"
 )
+
+const ns = 100
 
 type render struct {
 	window fyne.Window
@@ -30,13 +33,16 @@ func (r *render) refresh() {
 }
 
 func (r *render) draw(px, py, w, h int) color.Color {
-	var (
-		u   = float64(px) / float64(w)
-		v   = float64(h-py) / float64(h)
-		ray = r.camera.Ray(u, v)
-	)
+	var color = engine.Color{}
 
-	return r.color(ray).RGBA(1)
+	for i := 0; i < ns; i++ {
+		u := (float64(px) + rand.Float64() - .5) / float64(w)
+		v := (float64(h-py) + rand.Float64() - .5) / float64(h)
+		ray := r.camera.Ray(u, v)
+		color = color.Add(r.color(ray))
+	}
+
+	return color.DivF(float64(ns)).RGBA(1)
 }
 
 func (r *render) color(ray *engine.Ray) engine.Color {
@@ -54,10 +60,10 @@ func (r *render) color(ray *engine.Ray) engine.Color {
 }
 
 func (r *render) onKeyDown(ev *fyne.KeyEvent) {
-	if ev.Name == fyne.KeyEscape {
+	switch ev.Name {
+	case fyne.KeyEscape:
 		r.window.Close()
 	}
-
 	r.refresh()
 }
 
