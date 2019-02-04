@@ -10,13 +10,18 @@ import (
 )
 
 type render struct {
+	// window
 	window fyne.Window
 	canvas fyne.CanvasObject
 
+	// camera
 	bottomLeft engine.Vec3
 	horisontal engine.Vec3
 	vertical   engine.Vec3
 	origin     engine.Vec3
+
+	// objects
+	sphere engine.Sphere
 }
 
 func (r *render) Layout(objects []fyne.CanvasObject, size fyne.Size) {
@@ -44,16 +49,15 @@ func (r *render) draw(px, py, w, h int) color.Color {
 		Direction: r.bottomLeft.Add(r.horisontal.MulF(u)).Add(r.vertical.MulF(v)),
 	}
 
+	if r.sphere.RayIntersect(ray) {
+		return engine.Color{1, 0, 0}.RGBA(1)
+	}
+
 	var dir = ray.Direction.UnitV()
 	var t = 0.5 * (dir.Y() + 1.0)
 	var c = engine.Vec3{1, 1, 1}.MulF(1 - t).Add(engine.Vec3{0.5, 0.7, 1.0}.MulF(t))
 
-	return color.RGBA{
-		uint8(255.999 * c.X()),
-		uint8(255.999 * c.Y()),
-		uint8(255.999 * c.Z()),
-		0xff,
-	}
+	return engine.Color{c.X(), c.Y(), c.Z()}.RGBA(1)
 }
 
 func (r *render) onKeyDown(ev *fyne.KeyEvent) {
@@ -71,10 +75,11 @@ func Render(app fyne.App) {
 	window.SetPadded(false)
 	render := &render{
 		window:     window,
-		bottomLeft: engine.Vec3{-2, -1, -1},
+		bottomLeft: engine.Vec3{-2, -1.5, -1},
 		horisontal: engine.Vec3{4, 0, 0},
-		vertical:   engine.Vec3{0, 2, 0},
+		vertical:   engine.Vec3{0, 3, 0},
 		origin:     engine.Vec3{0, 0, 0},
+		sphere:     engine.Sphere{Center: engine.Vec3{0, 0, -1}, Radius: 0.5},
 	}
 	render.canvas = canvas.NewRaster(render.draw)
 
