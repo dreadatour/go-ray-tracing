@@ -73,3 +73,10 @@ Add metal material:
 Add fuzziness property to metal material:
 
 ![v0.0.10](/img/v0.0.10.png)
+
+
+### [v0.011](https://github.com/dreadatour/go-ray-tracing/tree/v0.011)
+
+Add dielectric material with refraction:
+
+![v0.011](/img/v0.011.png)

@@ -43,6 +43,11 @@ func (v Vec3) Div(v2 Vec3) Vec3 {
 	return Vec3{v[0] / v2[0], v[1] / v2[1], v[2] / v2[2]}
 }
 
+// Neg is nedative vector v (-v)
+func (v Vec3) Neg() Vec3 {
+	return Vec3{-v[0], -v[1], -v[2]}
+}
+
 // MulF is result of vector v and const f multiplication (v / f)
 func (v Vec3) MulF(f float64) Vec3 {
 	return Vec3{v[0] * f, v[1] * f, v[2] * f}
@@ -71,6 +76,17 @@ func (v Vec3) UnitV() Vec3 {
 // Reflect vector
 func (v Vec3) Reflect(n Vec3) Vec3 {
 	return v.Sub(n.MulF(Dot(v, n) * 2))
+}
+
+// Refract vector
+func (v Vec3) Refract(n Vec3, niOverNt float64) (Vec3, bool) {
+	var uv = v.UnitV()
+	var dt = Dot(uv, n)
+	var d = 1 - niOverNt*niOverNt*(1-dt*dt)
+	if d <= 0 {
+		return Vec3{}, false
+	}
+	return uv.Sub(n.MulF(dt)).MulF(niOverNt).Sub(n.MulF(math.Sqrt(d))), true
 }
 
 // Dot is scalar product of vectors v1 and v2

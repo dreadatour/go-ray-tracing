@@ -114,9 +114,8 @@ func Render(app fyne.App) {
 			engine.Sphere{
 				Center: engine.Vec3{-1, 0, -1},
 				Radius: 0.5,
-				Material: engine.Metal{
-					Albedo: engine.Color{0.8, 0.8, 0.8},
-					Fuzz:   1.0,
+				Material: engine.Dielectric{
+					RefIdx: 1.5,
 				},
 			},
 		},

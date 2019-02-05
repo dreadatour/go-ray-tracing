@@ -8,6 +8,8 @@ type Color [3]float64
 var (
 	// ColorBlack is black color (#000000)
 	ColorBlack = Color{0, 0, 0}
+	// ColorWhite is white color (#ffffff)
+	ColorWhite = Color{1, 1, 1}
 )
 
 // R returns color's red component
