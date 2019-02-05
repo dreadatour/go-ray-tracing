@@ -75,8 +75,15 @@ Add fuzziness property to metal material:
 ![v0.0.10](/img/v0.0.10.png)
 
 
-### [v0.011](https://github.com/dreadatour/go-ray-tracing/tree/v0.011)
+### [v0.0.11](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.11)
 
 Add dielectric material with refraction:
 
-![v0.011](/img/v0.011.png)
+![v0.0.11](/img/v0.0.11.png)
+
+
+### [v0.0.12](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.12)
+
+Hollow glass sphere:
+
+![v0.0.12](/img/v0.0.12.png)

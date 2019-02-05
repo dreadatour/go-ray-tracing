@@ -1,8 +1,19 @@
 package engine
 
+import (
+	"math"
+	"math/rand"
+)
+
 // Material defines now object scatter light
 type Material interface {
 	Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool)
+}
+
+func schlick(cosine, refIdx float64) float64 {
+	var r0 = (1 - refIdx) / (1 + refIdx)
+	r0 = r0 * r0
+	return r0 + (1-r0)*math.Pow(1-cosine, 5)
 }
 
 // Lambertian material diffuses the light (fiber)
@@ -34,14 +45,14 @@ var _ Material = &Metal{}
 
 // Scatter light by metal material
 func (m Metal) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
-	var reflected = ray.Direction.UnitV().Reflect(hit.N)
-	if Dot(reflected, hit.N) <= 0 {
+	var reflect = ray.Direction.UnitV().Reflect(hit.N)
+	if Dot(reflect, hit.N) <= 0 {
 		return nil, nil, false
 	}
 
 	var scattered = &Ray{
 		Origin:    hit.P,
-		Direction: reflected.Add(RandomInUnitSphere().MulF(m.Fuzz)),
+		Direction: reflect.Add(RandomInUnitSphere().MulF(m.Fuzz)),
 	}
 	return &m.Albedo, scattered, true
 }
@@ -59,6 +70,8 @@ func (m Dielectric) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
 	var (
 		outwardNormal Vec3
 		niOverNt      float64
+		cosine        float64
+		reflectProb   float64
 		attenuation   = &ColorWhite
 		scattered     *Ray
 	)
@@ -66,24 +79,36 @@ func (m Dielectric) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
 	if Dot(ray.Direction, hit.N) > 0 {
 		outwardNormal = hit.N.Neg()
 		niOverNt = m.RefIdx
+		cosine = m.RefIdx * Dot(ray.Direction, hit.N) / ray.Direction.Len()
 	} else {
 		outwardNormal = hit.N
 		niOverNt = 1 / m.RefIdx
+		cosine = -Dot(ray.Direction, hit.N) / ray.Direction.Len()
 	}
 
-	var refracted, ok = ray.Direction.Refract(outwardNormal, niOverNt)
+	var reflect = ray.Direction.Reflect(hit.N)
+	var refract, ok = ray.Direction.Refract(outwardNormal, niOverNt)
 	if ok {
+		reflectProb = schlick(cosine, m.RefIdx)
+	} else {
 		scattered = &Ray{
 			Origin:    hit.P,
-			Direction: refracted,
+			Direction: reflect,
 		}
-		return attenuation, scattered, true
+		reflectProb = 1
 	}
 
-	var reflected = ray.Direction.UnitV().Reflect(hit.N)
-	scattered = &Ray{
-		Origin:    hit.P,
-		Direction: reflected,
+	if rand.Float64() < reflectProb {
+		scattered = &Ray{
+			Origin:    hit.P,
+			Direction: reflect,
+		}
+	} else {
+		scattered = &Ray{
+			Origin:    hit.P,
+			Direction: refract,
+		}
 	}
-	return attenuation, scattered, false
+
+	return attenuation, scattered, true
 }

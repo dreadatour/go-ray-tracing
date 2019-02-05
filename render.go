@@ -118,6 +118,13 @@ func Render(app fyne.App) {
 					RefIdx: 1.5,
 				},
 			},
+			engine.Sphere{
+				Center: engine.Vec3{-1, 0, -1},
+				Radius: -0.45,
+				Material: engine.Dielectric{
+					RefIdx: 1.5,
+				},
+			},
 		},
 	}
 	render.canvas = canvas.NewRaster(render.draw)
