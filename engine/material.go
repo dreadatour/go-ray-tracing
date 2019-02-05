@@ -26,6 +26,7 @@ func (m Lambertian) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
 // Metal material reflects the light
 type Metal struct {
 	Albedo Color
+	Fuzz   float64
 }
 
 // check if Metal is material
@@ -40,7 +41,7 @@ func (m Metal) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
 
 	var scattered = &Ray{
 		Origin:    hit.P,
-		Direction: reflected,
+		Direction: reflected.Add(RandomInUnitSphere().MulF(m.Fuzz)),
 	}
 	return &m.Albedo, scattered, true
 }

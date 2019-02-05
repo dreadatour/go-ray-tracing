@@ -108,6 +108,7 @@ func Render(app fyne.App) {
 				Radius: 0.5,
 				Material: engine.Metal{
 					Albedo: engine.Color{0.8, 0.6, 0.2},
+					Fuzz:   0.3,
 				},
 			},
 			engine.Sphere{
@@ -115,6 +116,7 @@ func Render(app fyne.App) {
 				Radius: 0.5,
 				Material: engine.Metal{
 					Albedo: engine.Color{0.8, 0.8, 0.8},
+					Fuzz:   1.0,
 				},
 			},
 		},

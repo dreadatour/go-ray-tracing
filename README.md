@@ -66,3 +66,10 @@ Add material property to objects:
 Add metal material:
 
 ![v0.0.9](/img/v0.0.9.png)
+
+
+### [v0.0.10](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.10)
+
+Add fuzziness property to metal material:
+
+![v0.0.10](/img/v0.0.10.png)
