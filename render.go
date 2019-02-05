@@ -103,6 +103,20 @@ func Render(app fyne.App) {
 					Albedo: &engine.Color{0.8, 0.8, 0},
 				},
 			},
+			engine.Sphere{
+				Center: engine.Vec3{1, 0, -1},
+				Radius: 0.5,
+				Material: engine.Metal{
+					Albedo: engine.Color{0.8, 0.6, 0.2},
+				},
+			},
+			engine.Sphere{
+				Center: engine.Vec3{-1, 0, -1},
+				Radius: 0.5,
+				Material: engine.Metal{
+					Albedo: engine.Color{0.8, 0.8, 0.8},
+				},
+			},
 		},
 	}
 	render.canvas = canvas.NewRaster(render.draw)

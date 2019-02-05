@@ -22,3 +22,25 @@ func (m Lambertian) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
 	}
 	return m.Albedo, scattered, true
 }
+
+// Metal material reflects the light
+type Metal struct {
+	Albedo Color
+}
+
+// check if Metal is material
+var _ Material = &Metal{}
+
+// Scatter light by metal material
+func (m Metal) Scatter(ray *Ray, hit *Hit) (*Color, *Ray, bool) {
+	var reflected = ray.Direction.UnitV().Reflect(hit.N)
+	if Dot(reflected, hit.N) <= 0 {
+		return nil, nil, false
+	}
+
+	var scattered = &Ray{
+		Origin:    hit.P,
+		Direction: reflected,
+	}
+	return &m.Albedo, scattered, true
+}

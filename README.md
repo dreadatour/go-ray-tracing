@@ -59,3 +59,10 @@ Implement diffusion:
 Add material property to objects:
 
 ![v0.0.8](/img/v0.0.8.png)
+
+
+### [v0.0.9](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.9)
+
+Add metal material:
+
+![v0.0.9](/img/v0.0.9.png)
