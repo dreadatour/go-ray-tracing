@@ -96,3 +96,10 @@ Camera control:
 ![v0.0.13-1](/img/v0.0.13-1.min.png)
 ![v0.0.13-2](/img/v0.0.13-2.min.png)
 ![v0.0.13-3](/img/v0.0.13-3.min.png)
+
+
+### [v0.0.14](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.14)
+
+Defocus blur:
+
+![v0.0.14](/img/v0.0.14.min.png)

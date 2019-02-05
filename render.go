@@ -80,14 +80,19 @@ func Render(app fyne.App) {
 	window := app.NewWindow("Render")
 	window.SetTitle("Render")
 	window.SetPadded(false)
+
+	var lookFrom = engine.Vec3{3, 3, 2}
+	var lookAt = engine.Vec3{0, 0, -1}
 	render := &render{
 		window: window,
 		camera: engine.NewCamera(
-			engine.Vec3{-2, 2, 1},
-			engine.Vec3{0, 0, -1},
+			lookFrom,
+			lookAt,
 			engine.Vec3{0, 1, 0},
-			30,
+			20,
 			float64(640)/float64(480),
+			2,
+			lookFrom.Sub(lookAt).Len(),
 		),
 		scene: engine.Scene{
 			engine.Sphere{

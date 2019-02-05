@@ -113,3 +113,14 @@ func RandomInUnitSphere() Vec3 {
 		}
 	}
 }
+
+// RandomInUnitDisk returns random point in unit radius disk centered at origin
+func RandomInUnitDisk() Vec3 {
+	var p Vec3
+	for {
+		p = Vec3{rand.Float64()*2 - 1, rand.Float64()*2 - 1, 0}
+		if Dot(p, p) < 1 {
+			return p
+		}
+	}
+}
