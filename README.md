@@ -87,3 +87,12 @@ Add dielectric material with refraction:
 Hollow glass sphere:
 
 ![v0.0.12](/img/v0.0.12.min.png)
+
+
+### [v0.0.13](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.13)
+
+Camera control:
+
+![v0.0.13-1](/img/v0.0.13-1.min.png)
+![v0.0.13-2](/img/v0.0.13-2.min.png)
+![v0.0.13-3](/img/v0.0.13-3.min.png)

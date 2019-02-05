@@ -82,12 +82,13 @@ func Render(app fyne.App) {
 	window.SetPadded(false)
 	render := &render{
 		window: window,
-		camera: engine.Camera{
-			BottomLeft: engine.Vec3{-2, -1.5, -1},
-			Horisontal: engine.Vec3{4, 0, 0},
-			Vertical:   engine.Vec3{0, 3, 0},
-			Origin:     engine.Vec3{0, 0, 0},
-		},
+		camera: engine.NewCamera(
+			engine.Vec3{-2, 2, 1},
+			engine.Vec3{0, 0, -1},
+			engine.Vec3{0, 1, 0},
+			30,
+			float64(640)/float64(480),
+		),
 		scene: engine.Scene{
 			engine.Sphere{
 				Center: engine.Vec3{0, 0, -1},
