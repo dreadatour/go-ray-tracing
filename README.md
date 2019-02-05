@@ -2,6 +2,8 @@
 
 Playing with Ray Tracing with Go using Peter Shirley [Ray Tracing in One Weekend](http://www.realtimerendering.com/raytracing/Ray%20Tracing%20in%20a%20Weekend.pdf) book.
 
+![Random spheres ray tracing](/img/v0.1.0.min.png)
+
 
 ## Progress
 
@@ -103,3 +105,10 @@ Camera control:
 Defocus blur:
 
 ![v0.0.14](/img/v0.0.14.min.png)
+
+
+### [v0.1.0](https://github.com/dreadatour/go-ray-tracing/tree/v0.1.0)
+
+Random spheres:
+
+![v0.1.0](/img/v0.1.0.min.png)

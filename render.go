@@ -81,61 +81,105 @@ func Render(app fyne.App) {
 	window.SetTitle("Render")
 	window.SetPadded(false)
 
-	var lookFrom = engine.Vec3{3, 3, 2}
-	var lookAt = engine.Vec3{0, 0, -1}
 	render := &render{
 		window: window,
 		camera: engine.NewCamera(
-			lookFrom,
-			lookAt,
+			engine.Vec3{13, 2, 3},
+			engine.Vec3{0, 0, 0},
 			engine.Vec3{0, 1, 0},
-			20,
+			30,
 			float64(640)/float64(480),
-			2,
-			lookFrom.Sub(lookAt).Len(),
+			0.1,
+			10,
 		),
-		scene: engine.Scene{
-			engine.Sphere{
-				Center: engine.Vec3{0, 0, -1},
-				Radius: 0.5,
-				Material: engine.Lambertian{
-					Albedo: &engine.Color{0.8, 0.3, 0.3},
-				},
-			},
-			engine.Sphere{
-				Center: engine.Vec3{0, -100.5, -1},
-				Radius: 100,
-				Material: engine.Lambertian{
-					Albedo: &engine.Color{0.8, 0.8, 0},
-				},
-			},
-			engine.Sphere{
-				Center: engine.Vec3{1, 0, -1},
-				Radius: 0.5,
-				Material: engine.Metal{
-					Albedo: engine.Color{0.8, 0.6, 0.2},
-					Fuzz:   0.3,
-				},
-			},
-			engine.Sphere{
-				Center: engine.Vec3{-1, 0, -1},
-				Radius: 0.5,
-				Material: engine.Dielectric{
-					RefIdx: 1.5,
-				},
-			},
-			engine.Sphere{
-				Center: engine.Vec3{-1, 0, -1},
-				Radius: -0.45,
-				Material: engine.Dielectric{
-					RefIdx: 1.5,
-				},
-			},
-		},
+		scene: randomScene(),
 	}
 	render.canvas = canvas.NewRaster(render.draw)
 
 	window.SetContent(fyne.NewContainerWithLayout(render, render.canvas))
 	window.Canvas().SetOnKeyDown(render.onKeyDown)
 	window.Show()
+}
+
+func randomScene() engine.Scene {
+	var scene = engine.Scene{}
+
+	scene = append(scene, engine.Sphere{
+		Center: engine.Vec3{0, -1000, 0},
+		Radius: 1000,
+		Material: engine.Lambertian{
+			Albedo: &engine.Color{0.5, 0.5, 0.5},
+		},
+	})
+
+	for a := -11; a < 11; a++ {
+		for b := -11; b < 11; b++ {
+			var chooseMat = rand.Float64()
+			var center = engine.Vec3{float64(a) + .9*rand.Float64(), 0.2, float64(b) + 0.9*rand.Float64()}
+			if center.Sub(engine.Vec3{4, 0.2, 0}).Len() > .9 {
+				if chooseMat < 0.8 {
+					// diffuse
+					scene = append(scene, engine.Sphere{
+						Center: center,
+						Radius: .2,
+						Material: engine.Lambertian{
+							Albedo: &engine.Color{
+								rand.Float64() * rand.Float64(),
+								rand.Float64() * rand.Float64(),
+								rand.Float64() * rand.Float64(),
+							},
+						},
+					})
+				} else if chooseMat < 0.95 {
+					// metal
+					scene = append(scene, engine.Sphere{
+						Center: center,
+						Radius: .2,
+						Material: engine.Metal{
+							Albedo: engine.Color{
+								0.5 * (1 + rand.Float64()),
+								0.5 * (1 + rand.Float64()),
+								0.5 * (1 + rand.Float64()),
+							},
+							Fuzz: 0.5 * rand.Float64(),
+						},
+					})
+				} else {
+					// glass
+					scene = append(scene, engine.Sphere{
+						Center: center,
+						Radius: .2,
+						Material: engine.Dielectric{
+							RefIdx: 1.5,
+						},
+					})
+				}
+			}
+		}
+	}
+
+	scene = append(scene, engine.Sphere{
+		Center: engine.Vec3{0, 1, 0},
+		Radius: 1,
+		Material: engine.Dielectric{
+			RefIdx: 1.5,
+		},
+	})
+	scene = append(scene, engine.Sphere{
+		Center: engine.Vec3{-4, 1, 0},
+		Radius: 1,
+		Material: engine.Lambertian{
+			Albedo: &engine.Color{0.4, 0.2, 0.1},
+		},
+	})
+	scene = append(scene, engine.Sphere{
+		Center: engine.Vec3{4, 1, 0},
+		Radius: 1,
+		Material: engine.Metal{
+			Albedo: engine.Color{0.7, 0.6, 0.5},
+			Fuzz:   0,
+		},
+	})
+
+	return scene
 }
