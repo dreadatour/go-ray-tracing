@@ -27,27 +27,27 @@ func (c Color) B() float64 {
 	return c[2]
 }
 
-// Add is result of colors c and c2 sum (c + c2)
+// Add returns colors sum (c + c2)
 func (c Color) Add(c2 Color) Color {
 	return Color{c[0] + c2[0], c[1] + c2[1], c[2] + c2[2]}
 }
 
-// Mul is result of colors c and c2 multiplication (c * c2)
+// Mul returns colors multiplication (c * c2)
 func (c Color) Mul(c2 Color) Color {
 	return Color{c[0] * c2[0], c[1] * c2[1], c[2] * c2[2]}
 }
 
-// MulF is result of color c and const f multiplication (c * f)
-func (c Color) MulF(f float64) Color {
-	return Color{c[0] * f, c[1] * f, c[2] * f}
+// MulS returns color and scalar multiplication (c * s)
+func (c Color) MulS(s float64) Color {
+	return Color{c[0] * s, c[1] * s, c[2] * s}
 }
 
-// DivF is result of color c and const f division (c / f)
-func (c Color) DivF(f float64) Color {
-	return Color{c[0] / f, c[1] / f, c[2] / f}
+// DivS returns color and scalar division (c / s)
+func (c Color) DivS(s float64) Color {
+	return Color{c[0] / s, c[1] / s, c[2] / s}
 }
 
-// RGBA color
+// RGBA color from color and alpha-channel value
 func (c Color) RGBA(a float64) color.RGBA {
 	return color.RGBA{
 		uint8(255.999 * c[0]),

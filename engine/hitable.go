@@ -2,13 +2,13 @@ package engine
 
 // Hit is result of ray hitting any object
 type Hit struct {
-	T        float64
-	P        Vec3
-	N        Vec3
+	Distance float64
+	Point    Vector
+	Normal   Vector
 	Material Material
 }
 
 // Hitable is interface for hitable by ray objects
 type Hitable interface {
-	Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool)
+	Hit(ray *Ray, dMin float64, dMax float64) (*Hit, bool)
 }

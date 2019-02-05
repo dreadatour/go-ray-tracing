@@ -4,7 +4,7 @@ import "math"
 
 // Sphere is 3D sphere
 type Sphere struct {
-	Center   Vec3
+	Center   Vector
 	Radius   float64
 	Material Material
 }
@@ -13,7 +13,7 @@ type Sphere struct {
 var _ Hitable = &Sphere{}
 
 // Hit returns closest hit
-func (s Sphere) Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool) {
+func (s Sphere) Hit(ray *Ray, dMin float64, dMax float64) (*Hit, bool) {
 	var oc = ray.Origin.Sub(s.Center)
 	var a = Dot(ray.Direction, ray.Direction)
 	var b = Dot(oc, ray.Direction)
@@ -23,24 +23,24 @@ func (s Sphere) Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool) {
 		return nil, false
 	}
 
-	var t = (-b - math.Sqrt(d)) / a
-	if t > tMin && t < tMax {
-		var p = ray.PointAt(t)
+	var distance = (-b - math.Sqrt(d)) / a
+	if distance > dMin && distance < dMax {
+		var point = ray.PointAt(distance)
 		return &Hit{
-			T:        t,
-			P:        p,
-			N:        p.Sub(s.Center).DivF(s.Radius),
+			Distance: distance,
+			Point:    point,
+			Normal:   point.Sub(s.Center).DivS(s.Radius),
 			Material: s.Material,
 		}, true
 	}
 
-	t = (-b + math.Sqrt(d)) / a
-	if t > tMin && t < tMax {
-		var p = ray.PointAt(t)
+	distance = (-b + math.Sqrt(d)) / a
+	if distance > dMin && distance < dMax {
+		var point = ray.PointAt(distance)
 		return &Hit{
-			T:        t,
-			P:        p,
-			N:        p.Sub(s.Center).DivF(s.Radius),
+			Distance: distance,
+			Point:    point,
+			Normal:   point.Sub(s.Center).DivS(s.Radius),
 			Material: s.Material,
 		}, true
 	}
