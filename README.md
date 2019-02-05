@@ -52,3 +52,10 @@ Implement antialiasing:
 Implement diffusion:
 
 ![v0.0.7](/img/v0.0.7.png)
+
+
+### [v0.0.8](https://github.com/dreadatour/go-ray-tracing/tree/v0.0.8)
+
+Add material property to objects:
+
+![v0.0.8](/img/v0.0.8.png)

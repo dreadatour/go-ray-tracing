@@ -1,4 +1,4 @@
 .PHONY: run
 
 run:
-	go run main.go render.go
+	@go run main.go render.go

@@ -43,14 +43,14 @@ func (v Vec3) Div(v2 Vec3) Vec3 {
 	return Vec3{v[0] / v2[0], v[1] / v2[1], v[2] / v2[2]}
 }
 
-// MulF is result of vector v and const c multiplication (v / c)
-func (v Vec3) MulF(c float64) Vec3 {
-	return Vec3{v[0] * c, v[1] * c, v[2] * c}
+// MulF is result of vector v and const f multiplication (v / f)
+func (v Vec3) MulF(f float64) Vec3 {
+	return Vec3{v[0] * f, v[1] * f, v[2] * f}
 }
 
-// DivF is result of vector v and const c division (v / c)
-func (v Vec3) DivF(c float64) Vec3 {
-	return Vec3{v[0] / c, v[1] / c, v[2] / c}
+// DivF is result of vector v and const f division (v / f)
+func (v Vec3) DivF(f float64) Vec3 {
+	return Vec3{v[0] / f, v[1] / f, v[2] / f}
 }
 
 // SqLen is vector v squared length
@@ -66,6 +66,11 @@ func (v Vec3) Len() float64 {
 // UnitV is vector whose magnitude is 1
 func (v Vec3) UnitV() Vec3 {
 	return v.DivF(v.Len())
+}
+
+// Reflect vector
+func (v Vec3) Reflect(n Vec3) Vec3 {
+	return v.Sub(n.MulF(Dot(v, n) * 2))
 }
 
 // Dot is scalar product of vectors v1 and v2

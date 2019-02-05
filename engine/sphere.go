@@ -4,8 +4,9 @@ import "math"
 
 // Sphere is 3D sphere
 type Sphere struct {
-	Center Vec3
-	Radius float64
+	Center   Vec3
+	Radius   float64
+	Material Material
 }
 
 // check if sphere is hittable
@@ -26,9 +27,10 @@ func (s Sphere) Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool) {
 	if t > tMin && t < tMax {
 		var p = ray.PointAt(t)
 		return &Hit{
-			T: t,
-			P: p,
-			N: p.Sub(s.Center).DivF(s.Radius),
+			T:        t,
+			P:        p,
+			N:        p.Sub(s.Center).DivF(s.Radius),
+			Material: s.Material,
 		}, true
 	}
 
@@ -36,9 +38,10 @@ func (s Sphere) Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool) {
 	if t > tMin && t < tMax {
 		var p = ray.PointAt(t)
 		return &Hit{
-			T: t,
-			P: p,
-			N: p.Sub(s.Center).DivF(s.Radius),
+			T:        t,
+			P:        p,
+			N:        p.Sub(s.Center).DivF(s.Radius),
+			Material: s.Material,
 		}, true
 	}
 

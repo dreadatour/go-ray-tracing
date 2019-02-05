@@ -7,16 +7,20 @@ type Scene []Hitable
 var _ Hitable = &Scene{}
 
 // Hit returns closest hit
-func (s Scene) Hit(r *Ray, tMin float64, tMax float64) (bestHit *Hit, isHit bool) {
-	closest := tMax
+func (s Scene) Hit(ray *Ray, tMin float64, tMax float64) (*Hit, bool) {
+	var (
+		bestHit *Hit
+		isHit   bool
+		closest = tMax
+	)
 
 	for _, h := range s {
-		if hit, ok := h.Hit(r, tMin, closest); ok {
-			isHit = true
+		if hit, ok := h.Hit(ray, tMin, closest); ok {
 			bestHit = hit
+			isHit = true
 			closest = hit.T
 		}
 	}
 
-	return
+	return bestHit, isHit
 }
